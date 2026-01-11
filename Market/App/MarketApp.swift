@@ -25,7 +25,7 @@ struct MarketApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabRootView()
         }
         .modelContainer(sharedModelContainer)
     }
