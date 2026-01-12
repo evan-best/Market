@@ -9,19 +9,18 @@ import Foundation
 
 /// Service for getting category data.
 final class CategoryService {
+	static let shared = CategoryService(apiClient: APIClient.shared)
+
 	private let apiClient: APIClient
 	
-	init(apiClient: APIClient) {
+	private init(apiClient: APIClient) {
 		self.apiClient = apiClient
 	}
 	
 	/// Get all categories
 	/// - Returns: An array of `Category` models.
 	func getCategories() async throws -> [Category] {
-		let endpoint = Endpoint(
-			path: "categories"
-		)
-		// TODO: Trim weird test categories.
+		let endpoint = Endpoint(path: "categories")
 		return try await apiClient.get(endpoint)
 	}
 }

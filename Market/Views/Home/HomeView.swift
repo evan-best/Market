@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+	@State private var categoryVM = CategoryViewModel()
+	@State private var productVM = ProductViewModel()
     var body: some View {
 		ScrollView {
 			Text("Home")

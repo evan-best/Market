@@ -9,12 +9,14 @@ import Foundation
 
 /// Service for getting product data.
 final class ProductService {
-	private let apiClient: APIClient
+	static let shared = ProductService(apiClient: .shared)
 	
-	init(apiClient: APIClient) {
+	private let apiClient: APIClient
+
+	private init(apiClient: APIClient) {
 		self.apiClient = apiClient
 	}
-	
+
 	/// Fetches a paginated list of products from the API.
 	/// - Parameters:
 	///   - offset: Number of products to skip.
@@ -30,6 +32,5 @@ final class ProductService {
 		)
 
 		return try await apiClient.get(endpoint)
-
 	}
 }

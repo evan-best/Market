@@ -10,6 +10,8 @@ import Foundation
 @Observable
 final class ProductViewModel {
 	
+	private let service: ProductService = .shared
+	
 	// UI State
 	var products: [Product] = []
 	var isLoading: Bool = false
@@ -20,17 +22,15 @@ final class ProductViewModel {
 	private var offset: Int = 0
 	private let limit: Int
 	
-	private let service: ProductService
 	
 	private var hasMore: Bool = true
 	
-	init(service: ProductService, limit: Int = 10) {
-		self.service = service
+	init(limit: Int = 10) {
 		self.limit = limit
 	}
 	
 	/// Refreshes the list
-	func refresh() async throws {
+	func refresh() async {
 		isLoading = true
 		errorMessage = nil
 		

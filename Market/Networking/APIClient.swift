@@ -9,11 +9,14 @@ import Foundation
 
 /// API client for making requests and decoding
 final class APIClient {
+	static let shared = APIClient(
+		baseURL: URL(string: "https://api.escuelajs.co/api/v1/")!
+	)
 	private let baseURL: URL
 	private let session: URLSession
 	private let decoder: JSONDecoder
 	
-	init(baseURL: URL, session: URLSession = .shared, decoder: JSONDecoder = .init()) {
+	private init(baseURL: URL, session: URLSession = .shared, decoder: JSONDecoder = .init()) {
 		self.baseURL = baseURL
 		self.session = session
 		self.decoder = decoder
