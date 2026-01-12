@@ -12,14 +12,13 @@ struct HomeView: View {
 		ScrollView {
 			Text("Home")
 		}
-		.scrollEdgeEffectStyle(.automatic, for: .top)
 		.toolbar {
 			ToolbarItem (placement: .principal) {
 				Image("market-logo")
 					.resizable()
 					.scaledToFit()
 					.foregroundStyle(Color(.accent))
-					.frame(width: 120, height: 120)
+					.frame(width: 100, height: 100)
 			}
 		}
     }

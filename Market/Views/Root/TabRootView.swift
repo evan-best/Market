@@ -17,25 +17,32 @@ struct TabRootView: View {
 	
 	var body: some View {
 		TabView(selection: $selection) {
-			Tab("Home", image: "home", value: .home) {
+			
+			Tab("", image: "home", value: .home) {
 				NavigationStack {
 					HomeView()
 				}
 			}
 			
-			Tab("Favorites", image: "saved", value: .saved) {
+			Tab("", image: "saved", value: .saved) {
 				NavigationStack {
 					FavoritesView()
 				}
 			}
 			
-			Tab("Bag", image: "bag", value: .bag) {
+			Tab("", image: "bag", value: .bag) {
 				NavigationStack {
-					CartView()
+					BagView()
 				}
 			}
 			
-			Tab("Search", image: "search", value: .search, role: .search) {
+			Tab("", image: "profile", value: .profile) {
+				NavigationStack {
+					ProfileView()
+				}
+			}
+			
+			Tab("", image: "search", value: .search, role: .search) {
 				NavigationStack {
 					SearchView()
 				}
