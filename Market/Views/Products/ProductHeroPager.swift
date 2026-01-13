@@ -1,4 +1,13 @@
-private struct ProductHeroPager: View {
+//
+//  ProductHeroPager.swift
+//  Market
+//
+//  Created by Evan Best on 2026-01-12.
+//
+
+import SwiftUI
+
+struct ProductHeroPager: View {
 	let imageURLStrings: [String]
 
 	@State private var currentIndex: Int = 0
@@ -88,6 +97,6 @@ private struct ProductHeroPager: View {
 			.padding(.horizontal, 10)
 			.padding(.vertical, 6)
 			.background(.ultraThinMaterial)
-			clipShape(Capsule())
+			.clipShape(Capsule())
 	}
 }

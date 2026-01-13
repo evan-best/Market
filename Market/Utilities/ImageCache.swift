@@ -1,8 +1,8 @@
 //
 //  ImageCache.swift
-//  weevva-swiftui
+//  Market
 //
-//  Created by Evan Best on 2025-11-19.
+//  Created by Evan Best on 2026-01-12.
 //
 
 import SwiftUI

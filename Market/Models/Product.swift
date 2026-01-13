@@ -8,7 +8,7 @@
 import Foundation
 
 /// Product data model from Platzi API
-struct Product: Codable, Identifiable {
+struct Product: Codable, Identifiable, Hashable {
 	let id: Int
 	let title: String
 	let slug: String
@@ -17,3 +17,4 @@ struct Product: Codable, Identifiable {
 	let category: Category
 	let images: [String]
 }
+
