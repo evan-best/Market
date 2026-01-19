@@ -9,7 +9,11 @@ import SwiftUI
 
 struct ProductDetailView: View {
 	let product: Product
+
+	@State private var vm = ProductDetailViewModel()
 	@State private var currentImageIndex: Int = 0
+
+	@Namespace private var animation
 
 	private var imageURLs: [URL] {
 		product.images.compactMap { URL(string: $0) }
@@ -18,7 +22,7 @@ struct ProductDetailView: View {
 	var body: some View {
 		ZStack {
 			ScrollView {
-				VStack(spacing: 0) {
+				VStack(alignment: .leading, spacing: 0) {
 
 					// Hero Image Carousel - 75% of screen height
 					ZStack(alignment: .bottomTrailing) {
@@ -38,25 +42,21 @@ struct ProductDetailView: View {
 												)
 												.clipped()
 												.drawingGroup()
-
 										case .failure:
 											placeholderView
 												.frame(
 													width: geometry.size.width,
 													height: UIScreen.main.bounds.height * 0.75
 												)
-
 										case .empty:
 											ZStack {
-												Rectangle()
-													.fill(Color(.systemGray6))
+												Rectangle().fill(Color(.systemGray6))
 												ProgressView()
 											}
 											.frame(
 												width: geometry.size.width,
 												height: UIScreen.main.bounds.height * 0.75
 											)
-
 										@unknown default:
 											placeholderView
 												.frame(
@@ -69,10 +69,9 @@ struct ProductDetailView: View {
 								.tag(index)
 							}
 						}
+						.tabViewStyle(.page)
 						.frame(height: UIScreen.main.bounds.height * 0.75)
-						.tabViewStyle(.page(indexDisplayMode: .never))
 
-						// Image counter with glass effect
 						if imageURLs.count > 1 {
 							Text("\(currentImageIndex + 1)/\(imageURLs.count)")
 								.font(.system(size: 14, weight: .semibold))
@@ -84,7 +83,7 @@ struct ProductDetailView: View {
 						}
 					}
 
-					// Content section with solid background (same pattern)
+					// Content section
 					VStack(alignment: .leading, spacing: 16) {
 						Text(product.title)
 							.font(.title2)
@@ -97,7 +96,7 @@ struct ProductDetailView: View {
 							Text("•")
 								.foregroundStyle(.secondary)
 
-							Text(product.category.name)
+							Text(product.category)
 								.foregroundStyle(.secondary)
 						}
 
@@ -105,6 +104,21 @@ struct ProductDetailView: View {
 							Text(product.description)
 								.foregroundStyle(.secondary)
 								.padding(.top, 6)
+						}
+						
+						Text("Related products")
+							.font(.title3)
+							.bold()
+						// Related products
+						if vm.isLoading {
+							ProgressView()
+								.padding(.top, 10)
+						} else if !vm.relatedProducts.isEmpty {
+							ProductGrid(
+								products: vm.relatedProducts,
+								animation: animation
+							)
+							.padding(.top, 8)
 						}
 					}
 					.padding()
@@ -117,6 +131,9 @@ struct ProductDetailView: View {
 		}
 		.navigationTitle("Product")
 		.navigationBarTitleDisplayMode(.inline)
+		.task(id: product.id) {
+			await vm.loadFromCategory(for: product.category)
+		}
 	}
 
 	private var placeholderView: some View {
@@ -142,10 +159,22 @@ struct ProductDetailView: View {
     ProductDetailView(product: Product(
         id: 1,
         title: "Sample Product",
-        slug: "sample-product",
-        price: 99.99,
         description: "This is a sample product used for preview purposes.",
-        category: Category(id: 1, name: "Electronics", image: "", slug: "electronics"),
+        category: "Electronics",
+        price: 99.99,
+        discountPercentage: 0.0,
+        rating: 4.5,
+        stock: 10,
+        tags: ["sample", "electronics"],
+        brand: "SampleBrand",
+		sku: "SKU12345",
+        dimensions: Dimensions(width: 10, height: 5, depth: 2),
+        warrantyInformation: "1 year limited warranty",
+        shippingInformation: "Ships within 3-5 business days",
+        reviews: [],
+        returnPolicy: "30-day return policy",
+        minimumOrderQuantity: 1,
+        thumbnail: "https://picsum.photos/id/1/420/420",
         images: ["https://picsum.photos/id/1/420/420","https://picsum.photos/id/2/420/420","https://picsum.photos/id/3/420/420","https://picsum.photos/id/4/420/420","https://picsum.photos/id/5/420/420"]
     ))
 }

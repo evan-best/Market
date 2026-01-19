@@ -13,7 +13,7 @@ struct CategoryButton: View {
 
 	var body: some View {
 		VStack(spacing: 8) {
-			AsyncImage(url: URL(string: category.image)) { phase in
+			AsyncImage(url: URL(string: category.url)) { phase in
 				switch phase {
 				case .empty:
 					ProgressView()
@@ -50,9 +50,9 @@ struct CategoryButton: View {
 #Preview {
 	CategoryButton(
 		category: Category(
-			id: 1,
+			slug: "electronics",
 			name: "Electronics",
-			image: "https://picsum.photos/id/10/200/200", slug: "electronics"
+			url: "https://picsum.photos/id/10/200/200"
 		)
 	) {
 		print("Category tapped")

@@ -30,3 +30,4 @@ struct MarketApp: App {
         .modelContainer(sharedModelContainer)
     }
 }
+

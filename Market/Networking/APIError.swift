@@ -21,8 +21,19 @@ enum APIError: Error, LocalizedError {
 			return "Invalid URL"
 		case .nonHTTPResponse:
 			return "Response was not an HTTP response"
-		case .httpStatus(let code, let body):
-			return "HTTP error with status code \(code): \(body)"
+		case .httpStatus(let code, _):
+			switch code {
+			case 401, 403:
+				return "You don’t have permission to do that."
+			case 404:
+				return "Not found."
+			case 429:
+				return "Too many requests. Try again in a moment."
+			case 500...599:
+				return "The server is having trouble right now. Try again."
+			default:
+				return "Something went wrong. Please try again."
+			}
 		case .decodingFailed:
 			return "Failed to decode JSON"
 		case .noDataReturned:

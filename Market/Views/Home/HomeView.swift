@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-	@State private var categoryVM = CategoryViewModel()
-	@State private var productVM = ProductViewModel()
+	@State private var vm = HomeViewModel()
 	@State private var searchText: String = ""
 	@State private var path: [Product] = []
-	@State private var topPicks: [Product] = []
 
 	@Namespace private var animation
 
@@ -20,15 +18,23 @@ struct HomeView: View {
 		ScrollView {
 			VStack(alignment: .leading, spacing: 6) {
 
-				Text("Categories")
-					.font(.title2)
-					.bold()
-					.padding(.horizontal)
+				HStack {
+					Text("Shop by Category")
+						.font(.title2)
+						.bold()
+					Spacer()
+					Button {
+						
+					} label: {
+						Text("See All")
+					}
+				}
+				.padding(.horizontal)
 
 				// Categories
 				ScrollView(.horizontal, showsIndicators: false) {
 					HStack(spacing: 12) {
-						ForEach(categoryVM.categories) { category in
+						ForEach(vm.categoryVM.categories.prefix(6)) { category in
 							NavigationLink(destination: ProductsView(category: category)) {
 								CategoryButton(category: category)
 							}
@@ -41,33 +47,18 @@ struct HomeView: View {
 				Spacer(minLength: 16)
 				
 				// Top Picks
-				if !topPicks.isEmpty {
+				if !vm.topPicks.isEmpty {
 					HStack {
-						Text("Top Picks")
+						Text("Picked for You")
 							.font(.title2)
 							.bold()
 						Spacer()
 					}
 					.padding(.horizontal)
-					LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-						ForEach(topPicks, id: \.id) { product in
-							NavigationLink(value: product) {
-								VStack(alignment: .leading, spacing: 8) {
-									ProductImage(product: product, animation: animation)
-									Text(product.title)
-										.font(.subheadline)
-										.fontWeight(.semibold)
-										.lineLimit(1)
-									Text(product.price, format: .currency(code: "CAD"))
-										.font(.system(size: 14))
-										.fontWeight(.semibold)
-										.lineLimit(1)
-								}
-								.matchedTransitionSource(id: product.id, in: animation)
-							}
-							.buttonStyle(.plain)
-						}
-					}
+					ProductGrid(
+						products: vm.topPicks,
+						animation: animation
+					)
 					.padding(.horizontal)
 				}
 
@@ -77,14 +68,8 @@ struct HomeView: View {
 		}
 		.scrollClipDisabled(true)
 		.task {
-			await categoryVM.loadCategories()
-			await productVM.refresh()
-
-			if topPicks.isEmpty {
-				topPicks = Array(productVM.products.shuffled().prefix(6))
-			}
+			await vm.load()
 		}
-
 		.searchable(text: $searchText, placement: .navigationBarDrawer)
 		.toolbar {
 			ToolbarItem(placement: .principal) {

@@ -10,7 +10,7 @@ import Foundation
 @Observable
 final class ProductViewModel {
 	
-	private let service: ProductService = .shared
+	private let service = ProductService.service
 	
 	// UI State
 	var products: [Product] = []
@@ -19,7 +19,7 @@ final class ProductViewModel {
 	var errorMessage: String? = nil
 	
 	// Pagination
-	private var offset: Int = 0
+	private var skip: Int = 0
 	private let limit: Int
 	
 	
@@ -34,16 +34,16 @@ final class ProductViewModel {
 		isLoading = true
 		errorMessage = nil
 		
-		offset = 0
+		skip = 0
 		hasMore = true
 		products.removeAll(keepingCapacity: true)
 		
 		defer {isLoading = false}
 		
 		do {
-			let firstPage = try await service.fetchProducts(offset: offset, limit: limit)
+			let firstPage = try await service.fetchProducts(skip: skip, limit: limit)
 			products = firstPage
-			offset += firstPage.count
+			skip += firstPage.count
 			hasMore = firstPage.count == limit
 		} catch {
 			errorMessage = error.localizedDescription
@@ -71,9 +71,9 @@ final class ProductViewModel {
 		defer {isLoadingMore = false}
 		
 		do {
-			let nextPage = try await service.fetchProducts(offset: offset, limit: limit)
+			let nextPage = try await service.fetchProducts(skip: skip, limit: limit)
 			products.append(contentsOf: nextPage)
-			offset += nextPage.count
+			skip += nextPage.count
 			hasMore = nextPage.count == limit
 		} catch {
 			errorMessage = error.localizedDescription

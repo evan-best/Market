@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// Category data model from Platzi API
+/// Category data model from DummyJSON API
 struct Category: Codable, Identifiable, Hashable, Equatable {
-	let id: Int
-	let name: String
-	let image: String
 	let slug: String
+	let name: String
+	let url: String
+	var id: String { slug }
 }
 

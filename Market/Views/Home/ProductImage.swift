@@ -22,6 +22,7 @@ struct ProductImage: View {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+								.background(Color.gray.opacity(0.1))
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                                 .clipped()
                         case .failure:
@@ -44,7 +45,7 @@ struct ProductImage: View {
             }
         }
         .aspectRatio(3/4, contentMode: .fit)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         .matchedGeometryEffect(id: product.id, in: animation)
     }
 }

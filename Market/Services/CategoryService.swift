@@ -9,11 +9,11 @@ import Foundation
 
 /// Service for getting category data.
 final class CategoryService {
-	static let shared = CategoryService(apiClient: APIClient.shared)
+	static let service = CategoryService()
 
 	private let apiClient: APIClient
 	
-	private init(apiClient: APIClient) {
+	private init(apiClient: APIClient = .shared) {
 		self.apiClient = apiClient
 	}
 	

@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 final class CategoryViewModel {
-	private let service: CategoryService = .shared
+	private let service = CategoryService.service
 
 	var categories: [Category] = []
 	var isLoading: Bool = false
@@ -29,12 +29,12 @@ final class CategoryViewModel {
 			self.categories = fetched.filter { category in
 				let name = category.name.lowercased()
 				let slug = category.slug.lowercased()
-				let image = category.image.lowercased()
+				let url = category.url.lowercased()
 
 				if name == "string" { return false }
 				if name.contains("category") { return false }
 				if slug.contains("category") { return false }
-				if image.contains("pravatar.cc") { return false }
+				if url.contains("pravatar.cc") { return false }
 
 				return true
 			}

@@ -10,7 +10,7 @@ import Foundation
 /// API client for making requests and decoding
 final class APIClient {
 	static let shared = APIClient(
-		baseURL: URL(string: "https://api.escuelajs.co/api/v1/")!
+		baseURL: URL(string: "https://dummyjson.com/products")!
 	)
 	private let baseURL: URL
 	private let session: URLSession
@@ -19,6 +19,7 @@ final class APIClient {
 	private init(baseURL: URL, session: URLSession = .shared, decoder: JSONDecoder = .init()) {
 		self.baseURL = baseURL
 		self.session = session
+		decoder.dateDecodingStrategy = .iso8601
 		self.decoder = decoder
 	}
 	
@@ -43,7 +44,6 @@ final class APIClient {
 		// Create the request
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
-		request.cachePolicy = .returnCacheDataElseLoad
 
 		let data: Data
 		let response: URLResponse
@@ -68,8 +68,12 @@ final class APIClient {
 
 		// Decode response
 		do {
+			if let jsonString = String(data: data, encoding: .utf8) {
+				print("API Response:", jsonString)
+			}
 			return try decoder.decode(T.self, from: data)
 		} catch {
+			print("Decoding error:", error)
 			throw APIError.decodingFailed
 		}
 	}
