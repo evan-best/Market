@@ -43,7 +43,8 @@ final class ProductService {
 			path: "category/\(categoryName)"
 		)
 		
-		return try await apiClient.get(endpoint)
+		let response: ProductResponse =  try await apiClient.get(endpoint)
+		return response.products
 	}
 	
 	/// Searches through products

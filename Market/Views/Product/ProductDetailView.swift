@@ -106,7 +106,7 @@ struct ProductDetailView: View {
 								.padding(.top, 6)
 						}
 						
-						Text("Related products")
+						Text("More from \(product.category.capitalized(with: .current))")
 							.font(.title3)
 							.bold()
 						// Related products
